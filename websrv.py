@@ -12,17 +12,17 @@ DEFAULT_EXIT = '/shutdown'
 DEFAULT_FILE = './index.html'
 
 class MyHandler(BaseHTTPRequestHandler):
+    def log_message(self, format, *args):
+        return
+        
     def send_ok_headers(self):
         self.send_response(200)                        
         self.send_header('Content-type','text-html')  
         self.end_headers() 
-        pass 
-
+        
     def send_bye_message(self):
         self.wfile.write(bytes('bye','UTF-8'))
-        pass
-
-
+        
     def do_GET(self):
         if self.path == DEFAULT_EXIT:
             MyHandler.send_ok_headers(self)
@@ -51,12 +51,10 @@ class MainServer:
             self._server.handle_request()
 
     def start(self):
-        self._thread.start()
-        print("host running")
+        self._thread.start()        
 
     def shut_down(self):
-        self._thread.close()
-        print("host shut down")
+        self._thread.close()        
 
 m = MainServer()
 m.start()

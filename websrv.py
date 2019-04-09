@@ -62,17 +62,13 @@ class MainServer:
         self._thread.close()        
 
 def main():
-    if os.getpgrp() == os.tcgetpgrp(sys.stdout.fileno()):        
-        print('running in foreground')
+    if os.getpgrp() == os.tcgetpgrp(sys.stdout.fileno()):                
         # restarting as background process        
-        p = Popen(['python', sys.argv[0], '&', '\n'], stdin=PIPE, shell=False)
-            
-    else:        
-        print('running in background.')
+        p = Popen(['python', sys.argv[0], '&'], shell=False)        
+    else:                
         m = MainServer()
         m.start()
 
-    return
-
 if __name__ == '__main__':
     main()
+

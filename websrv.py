@@ -2,8 +2,10 @@
 
 import threading
 import http.server
-
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import os
+from subprocess import Popen, PIPE
+import sys
 
 DEFAULT_IP = '127.0.0.1'
 DEFAULT_PORT = 8080
@@ -13,7 +15,7 @@ DEFAULT_FILE = './index.html'
 class MyHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         return
-        
+
     def send_ok_headers(self):
         self.send_response(200)                        
         self.send_header('Content-type','text-html')  
@@ -40,9 +42,13 @@ class MyHandler(BaseHTTPRequestHandler):
 
 class MainServer:
     def __init__(self, port = DEFAULT_PORT):
-        self._server = HTTPServer((DEFAULT_IP, DEFAULT_PORT), MyHandler)
-        self._thread = threading.Thread(target=self.run)
-        self._thread.deamon = True 
+        try:
+            self._server = HTTPServer((DEFAULT_IP, DEFAULT_PORT), MyHandler)
+            self._thread = threading.Thread(target=self.run)
+            self._thread.deamon = True 
+        except OSError:
+            sys.stderr.write('server may already be running')
+            sys.exit(2)
 
     def run(self):
         self._server.running = True
@@ -55,7 +61,18 @@ class MainServer:
     def shut_down(self):
         self._thread.close()        
 
-m = MainServer()
-m.start()
+def main():
+    if os.getpgrp() == os.tcgetpgrp(sys.stdout.fileno()):        
+        print('running in foreground')
+        # restarting as background process        
+        p = Popen(['python', sys.argv[0], '&', '\n'], stdin=PIPE, shell=False)
+            
+    else:        
+        print('running in background.')
+        m = MainServer()
+        m.start()
 
+    return
 
+if __name__ == '__main__':
+    main()

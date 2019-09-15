@@ -20,14 +20,14 @@ def get_parameters(args):
     return inputfile, size
 
 def do_hash(filename, size):
-    sys.stdin = sys.stdin.detach()
-    md5 = hashlib.md5()
-    buffer = bytearray(size)
-    memview = memoryview(buffer)
-    with open(filename, 'rb', buffering=1) as f:        
-        for block in iter(lambda: f.readinto(memview)):
-            md5.update(memview[:block])        
-    print(md5.hexdigest())
+    m = hashlib.md5()
+    buffersize = 2**20
+    with open(filename, "rb") as f:        
+        buffer = f.read(buffersize)
+        while buffer:
+            m.update(buffer)
+            buffer = f.read(buffersize)            
+    print(m.hexdigest())
         
 try:
     inputfile, size = get_parameters(parsed_arguments())

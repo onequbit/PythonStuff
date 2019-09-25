@@ -95,3 +95,7 @@ def get_size(obj, seen=None):
         
     return size
 #=============================================================================================
+
+from datetime import datetime as dt
+
+timestamp = lambda: dt.now().strftime("%Y-%m-%d_%H-%M-%S.%f")

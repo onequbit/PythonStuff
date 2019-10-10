@@ -99,3 +99,10 @@ def get_size(obj, seen=None):
 from datetime import datetime as dt
 
 timestamp = lambda: dt.now().strftime("%Y-%m-%d_%H-%M-%S.%f")
+
+#=============================================================================================
+
+def reflect(some_object):
+    property_names = vars(__builtins__)
+    properties = [vars(__builtins__)[name] for name in property_names]
+    return property_names, properties

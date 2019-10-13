@@ -15,7 +15,7 @@ def is_word_to_keep(wordstr):
     no_dot = '.' not in wordstr
     no_slash = '/' not in wordstr
     no_digit = wordstr.isalpha()
-    return no_dash and no_dot and no_slash and no_digit 
+    return no_digit and no_dash and no_dot and no_slash
 
 def extract_word(rawbytes):
     return rawbytes.decode('utf-8').strip()

@@ -25,9 +25,12 @@ class Grid(object):
         self._cellrotate(7,5)
         self._cellrotate(8,8)
 
-    def __init__(self):
-        self._build_ptrs()
-        self._build_grid()
+    def __init__(self, cells = None):
+        self._build_ptrs()        
+        if cells is None:
+            self._build_grid()
+        else:
+            self._grid = cells
         
     def _cellrotate(self, row, count):
         left = self._grid[row][:count]
